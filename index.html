@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>镜面反射Button</title>
+    <link href="./index.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- src="http://vd3.bdstatic.com/mda-pcpek3rwu67js7u9/1080p/cae_h264/1679737614116338716/mda-pcpek3rwu67js7u9.mp4" -->
+    <button
+        class="button"
+        src="http://vd3.bdstatic.com/mda-pcpek3rwu67js7u9/1080p/cae_h264/1679737614116338716/mda-pcpek3rwu67js7u9.mp4"
+    >
+        <video id="button-video">
+            Your browser does not support the video tag. 
+        </video>
+        <div class="button-text">Click</div>
+    </button>
+    
+
+    <script>
+        const video = document.getElementById('button-video');
+        let showOrHide = false;
+        function navigatorControl() {
+            if (!showOrHide) {
+                navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: false,
+                }).then((stream) => {
+                    video.srcObject = stream;
+                    this.stopMedia = stream.getTracks()[0];
+                    video.onloadedmetadata = () => {
+                        video.play();
+                        showOrHide = true;
+                    };
+                }).catch((e) => console.log(e));
+            }
+
+            if (showOrHide) {
+                this.stopMedia.stop();
+                video.srcObject = null;
+                showOrHide = false;
+            }
+        }
+        function init() {
+            const button = document.getElementsByClassName('button')[0];
+            button.addEventListener('click', navigatorControl);
+        }
+        init();
+    </script>
+</body>
+</html>
